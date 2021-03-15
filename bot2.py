@@ -33,6 +33,7 @@ def muzika(vc):
                 vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
             except:
                 print('Kju je prazan!')
+                return
         else:
             return
 
