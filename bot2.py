@@ -9,6 +9,7 @@ import random
 from tube_dl import Youtube
 from discord.ext import commands
 
+#upišite ime servera
 server = 'Drugovi'
 
 svirac = commands.Bot(command_prefix='b')
@@ -183,5 +184,5 @@ async def miks(ctx):
 
     trenutni=trenutni+len(pizda)
 
-
+#upišite token s discordove stranice
 svirac.run('ODIwNjIzMTY4MzE3NDIzNjM2.YE324Q.dM3h8q57JPTT698Jdz9NyV39Gbg')
