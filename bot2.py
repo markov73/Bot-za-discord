@@ -27,7 +27,7 @@ def muzika(vc):
             return
         elif len(q) >= 1:
             try:
-                pesma = "/home/jakov/Documents/muzickibot/muzika/" + q[trenutni]
+                pesma = "/home/jakov/Documents/muzickibot/muzika/" + q[trenutni] #promijenite put do mp3 fajla
                 pesma = pesma + ".mp3"
                 trenutni = trenutni+1
                 print('Trebal bi svirati ' + pesma)
