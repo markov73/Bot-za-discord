@@ -168,18 +168,21 @@ async def lista(ctx):
         response = str(x) + " " + q[x]
         await ctx.send(response)
 
+
 @svirac.command(name='miks', help='shuffle')
 async def miks(ctx):
     global q
-    pizda = []
-    for x in range(0,len(q)):
-        pizda.append(q[x])
-    random.shuffle(pizda)
+    random.shuffle(q)
 
-    print(pizda)
-
-    for x in range(0,len(pizda)):
-        q[x] = pizda[x]
+@svirac.command(name='clear', help='klira kju')
+async def klir(ctx):
+    global q
+    q.clear()
+    vc = ctx.voice_client
+    try: vc.stop()
+    except:
+        response = 'Nist ne sviram'
+        await ctx.send(response)
 
 
 svirac.run('BOT_TOKEN') #dodaj svoj token
