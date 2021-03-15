@@ -28,7 +28,7 @@ def muzika(vc):
             return
         elif len(q) >= 1:
             try:
-                sviram = q.pop()
+                sviram = q.popleft()
                 pesma = "/home/user/Music" + sviram #promijeni putanju do mp3 fajlova
                 pesma = pesma + ".mp3"
                 print('Trebal bi svirati ' + pesma)
