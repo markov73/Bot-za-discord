@@ -8,18 +8,17 @@ import re
 import random
 from tube_dl import Youtube
 from discord.ext import commands
+from collections import deque
 
-#upišite ime servera
-server = 'SERVER_NAME'
+server = 'IME_SERVERA' #dodaj ime svojeg servera
 
 svirac = commands.Bot(command_prefix='b')
-q = []
-trenutni = 0
+q = deque()
+sviram = ' '
 
-
-#lista
+#queue
 def muzika(vc):
-    global trenutni
+    global q
     while True:
         if vc.is_playing():
             print('Sviram')
@@ -27,9 +26,9 @@ def muzika(vc):
             return
         elif len(q) >= 1:
             try:
-                pesma = "/home/jakov/Documents/muzickibot/muzika/" + q[trenutni] #promijenite put do mp3 fajla
+                sviram = q.pop()
+                pesma = "/home/user/Music" + sviram #promijeni putanju do mp3 fajlova
                 pesma = pesma + ".mp3"
-                trenutni = trenutni+1
                 print('Trebal bi svirati ' + pesma)
                 vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
             except:
@@ -56,7 +55,7 @@ async def sviraj(ctx, *ime):
     try: await channel.connect()
     except:
         print('Already connected.')
-        await ctx.send('Sviram pesmu ' + q[trenutni-1])
+        await ctx.send('Sviram pesmu ' + sviram)
 
 #    fajl = "/home/jakov/Documents/muzickibot/muzika/"
     fajl = ime[0]
@@ -94,7 +93,7 @@ async def download(ctx, *query):
     try: await channel.connect()
     except:
         print('Already connected.')
-        await ctx.send('Sviram pesmu ' + q[trenutni-1])
+        await ctx.send('Sviram pesmu ' + sviram)
 
     upis = query[0]
     for i in range(1,len(query)):
@@ -148,7 +147,6 @@ async def remove(ctx, *imena):
         upis = upis + ' ' + imena[x]
     try:
         q.remove(upis)
-        trenutni = trenutni -1
     except:
         response = 'Nema pesme na tom mestu u kjuu'
         await ctx.send(response)
@@ -164,25 +162,22 @@ async def disconnect(ctx):
 
 @svirac.command(name='lista', help='ispisuje kaj je na listi')
 async def lista(ctx):
-    for x in range(trenutni,len(q)):
-        response = str(x-trenutni+1) + " " + q[x]
+    for x in range(0,len(q)):
+        response = str(x) + " " + q[x]
         await ctx.send(response)
 
 @svirac.command(name='miks', help='shuffle')
 async def miks(ctx):
     global q
-    global trenutni
     pizda = []
-    for x in range(trenutni,len(q)):
+    for x in range(0,len(q)):
         pizda.append(q[x])
     random.shuffle(pizda)
-    
+
     print(pizda)
 
     for x in range(0,len(pizda)):
-        q.append(str(pizda[x]))
+        q[x] = pizda[x]
 
-    trenutni=trenutni+len(pizda)
 
-#upišite token s discordove stranice
-svirac.run('BOT_TOKEN')
+svirac.run('BOT_TOKEN') #dodaj svoj token
