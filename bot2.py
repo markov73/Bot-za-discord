@@ -8,11 +8,13 @@ import re
 import random
 from tube_dl import Youtube
 from discord.ext import commands
+from discord.ext.commands import Bot
 from collections import deque
+from pretty_help import PrettyHelp
 
-server = 'IME_SERVERA' #dodaj ime svojeg servera
+server = 'Drugovi'
 
-svirac = commands.Bot(command_prefix='b')
+svirac = commands.Bot(command_prefix='b', help_command=PrettyHelp(no_category="Help", show_index=False))
 q = deque()
 sviram = ' '
 
