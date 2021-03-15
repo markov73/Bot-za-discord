@@ -20,24 +20,18 @@ sviram = ' '
 def muzika(vc):
     global q
     global sviram
-    
-    while True:
-        if vc.is_playing():
-            print('Sviram')
-            time.sleep(1)
+
+    if len(q) > 0 and not vc.is_playing():
+        try:
+            sviram = q.popleft()
+            pesma = "/home/jakov/Documents/muzickibot/muzika/" + sviram #uredite put do mp3 fajlova
+            pesma = pesma + ".mp3"
+            print('Trebal bi svirati ' + pesma)
+            vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
+        except:
+            print('Kju je prazan!')
             return
-        elif len(q) >= 1:
-            try:
-                sviram = q.popleft()
-                pesma = "/home/user/Music" + sviram #promijeni putanju do mp3 fajlova
-                pesma = pesma + ".mp3"
-                print('Trebal bi svirati ' + pesma)
-                vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
-            except:
-                print('Kju je prazan!')
-                return
-        else:
-            return
+    return  
 
 #spajanje na server
 @svirac.event
