@@ -157,13 +157,14 @@ async def disconnect(ctx):
         await ctx.voice_client.disconnect()
     except:
         await ctx.send('Nisam spojen. Koji ti je kurac?')
-
+        
 @svirac.command(name='lista', help='ispisuje kaj je na listi')
 async def lista(ctx):
+    response = ''
     for x in range(0,len(q)):
-        response = str(x) + " " + q[x]
-        await ctx.send(response)
-
+        response = response + str(x) + " " + q[x] + '\n'
+    embed = discord.Embed(title="Popis pesama", description=response, color=discord.Color.blue())
+    await ctx.send(embed=embed)
 
 @svirac.command(name='miks', help='shuffle')
 async def miks(ctx):
@@ -181,8 +182,15 @@ async def klir(ctx):
         await ctx.send(response)
         
 @svirac.command(name='popis', help='ispisuje popis mogucih pesama')
-async def popis(ctx):
+async def popis(ctx, slovo):
     os.system('ls > popis.txt')
-    await ctx.send(file=discord.File(r'./popis.txt'))
+    file = open("/home/jakov/Documents/muzickibot/muzika/popis.txt", "r")
+    ispis = ''
+    for x in file:
+        if x[0] == slovo.lower() or x[0] == slovo.upper():
+            ispis = ispis + x + '\n'
+
+    embed = discord.Embed(title="Popis pesama", description=ispis, color=discord.Color.blue())
+    await ctx.send(embed=embed)
 
 svirac.run('BOT_TOKEN') #dodaj svoj token
