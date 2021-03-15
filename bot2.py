@@ -19,6 +19,8 @@ sviram = ' '
 #queue
 def muzika(vc):
     global q
+    global sviram
+    
     while True:
         if vc.is_playing():
             print('Sviram')
