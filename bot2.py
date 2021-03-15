@@ -163,7 +163,7 @@ async def lista(ctx):
     response = ''
     for x in range(0,len(q)):
         response = response + str(x) + " " + q[x] + '\n'
-    embed = discord.Embed(title="Popis pesama", description=response, color=discord.Color.blue())
+    embed = discord.Embed(title="Kju pesama", description=response, color=discord.Color.blue())
     await ctx.send(embed=embed)
 
 @svirac.command(name='miks', help='shuffle')
