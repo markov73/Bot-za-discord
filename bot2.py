@@ -177,6 +177,10 @@ async def klir(ctx):
     except:
         response = 'Nist ne sviram'
         await ctx.send(response)
-
+        
+@svirac.command(name='popis', help='ispisuje popis mogucih pesama')
+async def popis(ctx):
+    os.system('ls > popis.txt')
+    await ctx.send(file=discord.File(r'./popis.txt'))
 
 svirac.run('BOT_TOKEN') #dodaj svoj token
