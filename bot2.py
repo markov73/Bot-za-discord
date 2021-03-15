@@ -162,8 +162,8 @@ async def disconnect(ctx):
 async def lista(ctx):
     response = ''
     for x in range(0,len(q)):
-        response = response + str(x) + " " + q[x] + '\n'
-    embed = discord.Embed(title="Kju pesama", description=response, color=discord.Color.blue())
+        response = response + str(x+1) + " " + q[x] + '\n'
+    embed = discord.Embed(title="Kju pesama", description=response, color=discord.Color.red())
     await ctx.send(embed=embed)
 
 @svirac.command(name='miks', help='shuffle')
