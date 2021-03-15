@@ -5,6 +5,7 @@ import asyncio
 import discord
 import urllib.request
 import re
+import random
 from tube_dl import Youtube
 from discord.ext import commands
 
@@ -162,4 +163,21 @@ async def lista(ctx):
         response = str(x-trenutni+1) + " " + q[x]
         await ctx.send(response)
 
-svirac.run('ODIwNjIzMTY4MzE3NDIzNjM2.YE324Q.3XKf5PP51TBJC5Oyqw3a_u2E__0')
+@svirac.command(name='miks', help='shuffle')
+async def miks(ctx):
+    global q
+    global trenutni
+    pizda = []
+    for x in range(trenutni,len(q)):
+        pizda.append(q[x])
+    random.shuffle(pizda)
+    
+    print(pizda)
+
+    for x in range(0,len(pizda)):
+        q.append(str(pizda[x]))
+
+    trenutni=trenutni+len(pizda)
+
+
+svirac.run('ODIwNjIzMTY4MzE3NDIzNjM2.YE324Q.dM3h8q57JPTT698Jdz9NyV39Gbg')
