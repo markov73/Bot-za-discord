@@ -25,11 +25,14 @@ def muzika(vc):
             time.sleep(1)
             return
         elif len(q) >= 1:
-            pesma = "/home/jakov/Documents/muzickibot/muzika/" + q[trenutni]
-            pesma = pesma + ".mp3"
-            trenutni = trenutni+1
-            print('Trebal bi svirati ' + pesma)
-            vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
+            try:
+                pesma = "/home/jakov/Documents/muzickibot/muzika/" + q[trenutni]
+                pesma = pesma + ".mp3"
+                trenutni = trenutni+1
+                print('Trebal bi svirati ' + pesma)
+                vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
+            except:
+                print('Kju je prazan!')
         else:
             return
 
