@@ -6,13 +6,13 @@ import urllib.request
 import re
 import random
 import difflib
-from tube_dl import Youtube
+import unicodedata
 from discord.ext import commands
 from discord.ext.commands import Bot
 from collections import deque
 from pretty_help import PrettyHelp
 
-server = 'IME_SERVERA'
+server = 'SERVER'
 
 svirac = commands.Bot(command_prefix='b', help_command=PrettyHelp(no_category="Help", show_index=False))
 q = deque()
@@ -23,13 +23,15 @@ def download(upis):
     trazi = "https://www.youtube.com/results?search_query="
     query = upis.replace(" ", "+")
     trazi = trazi + query
+    trazi = str(trazi.encode('utf-8').decode('ascii', 'ignore'))
     print(trazi)
 
     html = urllib.request.urlopen(trazi)
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
     rezultat = "https://www.youtube.com/watch?v=" + video_ids[0]
 
-    naredba = 'youtube-dl -x --audio-format mp3 --output "' + upis + '.mp3" ' + rezultat
+    naredba = 'youtube-dl -x --audio-format mp3 --output "/home/jakov/Documents/muzickibot/muzika/' + upis + '.mp3" ' + rezultat
+
     os.system(naredba)
     print('Skinuto je')
 
@@ -86,12 +88,12 @@ async def sviraj(ctx, *ime):
         file = open("popis.txt", "r")
 
         for x in file:
-            distanca = difflib.SequenceMatcher(None, pesma, x).ratio()
+            distanca = difflib.SequenceMatcher(None, pesma[:len(pesma)-4], x[:len(x)-4]).ratio()
             if(distanca > najmanja):
                 najmanja = distanca
                 fajl = x
 
-        if najmanja > 0.6:
+        if najmanja > 0.6 * pow(0.995, len(fajl)-6):
             fajl = fajl[:len(fajl)-5]
             q.append(fajl)
         else:
@@ -196,5 +198,6 @@ async def skini(ctx, *upis):
     for x in range(1,len(upis)):
         pjesma = pjesma + ' ' + upis[x]
     download(pjesma)
+    await ctx.send('Skinuto je.')
 
-svirac.run('BOT_TOKEN')
+svirac.run('TOKEN')
