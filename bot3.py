@@ -12,7 +12,7 @@ from discord.ext.commands import Bot
 from collections import deque
 from pretty_help import PrettyHelp
 
-server = 'SERVER'
+server = 'IME_SERVERA'
 
 svirac = commands.Bot(command_prefix='b', help_command=PrettyHelp(no_category="Help", show_index=False))
 q = deque()
@@ -41,36 +41,10 @@ def muzika(vc):
     if len(q) > 0 and not vc.is_playing():
         sviram = q.popleft()
         pesma = sviram + ".mp3"
+        pesma = '/home/jakov/Documents/muzickibot/muzika/' + pesma
+        print('Trebal bi svirati ' + pesma + ' ' + str(len(pesma)))
+        vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
 
-        #fajl postoji
-        if os.path.exists('/home/jakov/Documents/muzickibot/muzika/' + pesma):
-            pesma = '/home/jakov/Documents/muzickibot/muzika/' + pesma
-            print('Trebal bi svirati ' + pesma + ' ' + str(len(pesma)))
-            vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
-        else:
-            #fajl ne postoji
-            najmanja = -1 #razlika najblizeg
-            fajl = ' ' #ime najblizeg
-
-            os.system('ls > popis.txt')
-            file = open("popis.txt", "r")
-
-            for x in file:
-                distanca = difflib.SequenceMatcher(None, pesma, x).ratio()
-                if(distanca > najmanja):
-                    najmanja = distanca
-                    fajl = x
-
-            if najmanja > 0.6:
-                fajl = '/home/jakov/Documents/muzickibot/muzika/' + fajl
-                print('Trebal bi svirati ' + fajl + ' ' + str(len(fajl)))
-                fajl = fajl[:len(fajl)-1]
-                vc.play(discord.FFmpegOpusAudio(fajl), after=lambda m: muzika(vc))
-            else:
-                download(sviram)
-                pesma = '/home/jakov/Documents/muzickibot/muzika/' + pesma
-                print('Trebal bi svirati ' + pesma + ' ' + str(len(pesma)))
-                vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
     return
 
 #spajanje na server
@@ -93,25 +67,43 @@ async def sviraj(ctx, *ime):
         print('Already connected.')
         await ctx.send('Sviram pesmu ' + sviram)
 
-#    fajl = "/home/jakov/Documents/muzickibot/muzika/"
-    fajl = ime[0]
+    fajlq = ime[0]
     duljina = len(ime)
     for x in range(1,duljina):
-        fajl = fajl + ' ' + ime[x]
-#    fajl = fajl + ".mp3"
+        fajlq = fajlq + ' ' + ime[x]
 
-    q.append(fajl)
-    print(fajl)
-    await ctx.send('Dodana je pesma ' + fajl)
+    pesma = fajlq + ".mp3"
+    #fajl postoji
+    if os.path.exists('/home/jakov/Documents/muzickibot/muzika/' + pesma):
+        pesma = '/home/jakov/Documents/muzickibot/muzika/' + pesma
+        q.append(fajlq)
+    else:
+        #fajl ne postoji
+        najmanja = -1 #razlika najblizeg
+        fajl = ' ' #ime najblizeg
+
+        os.system('ls > popis.txt')
+        file = open("popis.txt", "r")
+
+        for x in file:
+            distanca = difflib.SequenceMatcher(None, pesma, x).ratio()
+            if(distanca > najmanja):
+                najmanja = distanca
+                fajl = x
+
+        if najmanja > 0.6:
+            fajl = fajl[:len(fajl)-5]
+            q.append(fajl)
+        else:
+            download(fajlq)
+            await ctx.send('Skinuto je.')
+            q.append(fajlq)
+
+
+    await ctx.send('Dodana je pesma ' + q[-1])
     vc = ctx.voice_client
 
     muzika(vc)
-#    response = 'Sviram ' + fajl
-
-#    vc = ctx.voice_client
-#    vc.play(discord.FFmpegPCMAudio(fajl)
-#    ctx.send(response)
-
 
 
 #pauziranje
@@ -197,12 +189,12 @@ async def popis(ctx, slovo):
 
     embed = discord.Embed(title="Popis pesama", description=ispis, color=discord.Color.blue())
     await ctx.send(embed=embed)
-    
+
 @svirac.command(name='download', help='skida pesmu s interneta')
 async def skini(ctx, *upis):
     pjesma = upis[0]
     for x in range(1,len(upis)):
         pjesma = pjesma + ' ' + upis[x]
-    download(pjesma)    
+    download(pjesma)
 
-svirac.run('TOKEN')
+svirac.run('BOT_TOKEN')
