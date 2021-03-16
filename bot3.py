@@ -1,38 +1,22 @@
 # bot.py
 import os
-import time
 import asyncio
 import discord
 import urllib.request
 import re
 import random
+import difflib
 from tube_dl import Youtube
 from discord.ext import commands
 from discord.ext.commands import Bot
 from collections import deque
 from pretty_help import PrettyHelp
 
-server = 'IME_SERVERA'
+server = 'SERVER'
 
 svirac = commands.Bot(command_prefix='b', help_command=PrettyHelp(no_category="Help", show_index=False))
 q = deque()
 sviram = ' '
-
-def hamming_distance(string1, string2):
-    dist_counter = 0
-    if(len(string1) > len(string2)):
-        manji = len(string2)
-        veci = len(string1)
-    else:
-        manji = len(string1)
-        veci = len(string2)
-
-    for n in range(0, manji):
-        if string1[n] != string2[n]:
-            dist_counter += 1
-
-    dist_counter = dist_counter + veci - manji
-    return dist_counter
 
 #muzika s interneta
 def download(upis):
@@ -65,23 +49,23 @@ def muzika(vc):
             vc.play(discord.FFmpegOpusAudio(pesma), after=lambda m: muzika(vc))
         else:
             #fajl ne postoji
-            najmanja = 10000000 #razlika najblizeg
+            najmanja = -1 #razlika najblizeg
             fajl = ' ' #ime najblizeg
 
             os.system('ls > popis.txt')
             file = open("popis.txt", "r")
 
             for x in file:
-                distanca = hamming_distance(pesma, x)
+                distanca = difflib.SequenceMatcher(None, pesma, x).ratio()
                 print('distanca: ' + str(distanca) + ' ' + x)
-                if(distanca < najmanja):
-                    fajl = x
+                if(distanca > najmanja):
                     najmanja = distanca
+                    fajl = x
 
-            if najmanja < 5:
+            if najmanja > 0.6:
                 fajl = '/home/jakov/Documents/muzickibot/muzika/' + fajl
-                fajl = fajl[:len(fajl)-1]
                 print('Trebal bi svirati ' + fajl + ' ' + str(len(fajl)))
+                fajl = fajl[:len(fajl)-1]
                 vc.play(discord.FFmpegOpusAudio(fajl), after=lambda m: muzika(vc))
             else:
                 download(sviram)
@@ -215,4 +199,4 @@ async def popis(ctx, slovo):
     embed = discord.Embed(title="Popis pesama", description=ispis, color=discord.Color.blue())
     await ctx.send(embed=embed)
 
-svirac.run('BOT_TOKEN') #upisite token
+svirac.run('TOKEN')
