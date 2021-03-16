@@ -57,7 +57,6 @@ def muzika(vc):
 
             for x in file:
                 distanca = difflib.SequenceMatcher(None, pesma, x).ratio()
-                print('distanca: ' + str(distanca) + ' ' + x)
                 if(distanca > najmanja):
                     najmanja = distanca
                     fajl = x
