@@ -197,5 +197,12 @@ async def popis(ctx, slovo):
 
     embed = discord.Embed(title="Popis pesama", description=ispis, color=discord.Color.blue())
     await ctx.send(embed=embed)
+    
+@svirac.command(name='download', help='skida pesmu s interneta')
+async def skini(ctx, *upis):
+    pjesma = upis[0]
+    for x in range(1,len(upis)):
+        pjesma = pjesma + ' ' + upis[x]
+    download(pjesma)    
 
 svirac.run('TOKEN')
