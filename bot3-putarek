@@ -6,6 +6,7 @@ import urllib.request
 import re
 import random
 import difflib
+import unidecode
 from discord.ext import commands
 from discord.ext.commands import Bot
 from collections import deque
@@ -22,6 +23,7 @@ def download(upis):
     trazi = "https://www.youtube.com/results?search_query="
     query = upis.replace(" ", "+")
     trazi = trazi + query
+    trazi.encode('ascii', 'ignore')
     print(trazi)
 
     html = urllib.request.urlopen(trazi)
