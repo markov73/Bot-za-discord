@@ -209,7 +209,7 @@ async def now(ctx):
     if vc.is_playing():
         await ctx.send('Sviram pesmu ' + sviram)
     else:
-        ctx.send('Ne sviram nikaj. Koji ti je kurac?')
+        await ctx.send('Ne sviram nikaj. Koji ti je kurac?')
 
 @svirac.command(name='ladd', help='stavlja pesmu na odabranu playlistu (upisite ime liste pa zatim ime pesme)')
 async def ladd(ctx, list, *args):
