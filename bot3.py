@@ -95,7 +95,7 @@ async def sviraj(ctx, *ime):
                 najmanja = distanca
                 fajl = x
 
-        if najmanja > 0.6 * pow(0.995, len(fajl)-6):
+        if najmanja > 0.65 * pow(0.995, len(fajl)-6):
             fajl = fajl[:len(fajl)-5]
             q.append(fajl)
         else:
@@ -237,7 +237,7 @@ async def ladd(ctx, list, *args):
                 najmanja = distanca
                 fajl = x
 
-        if najmanja > 0.6 * pow(0.995, len(fajl)-6):
+        if najmanja > 0.65 * pow(0.995, len(fajl)-6):
             fajl = fajl[:len(fajl)-5]
             fajl2.write(fajl + "\n")
             await ctx.send('Stavljena je pesma ' + fajl + ' na listu ' + list)
