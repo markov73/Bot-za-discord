@@ -144,6 +144,7 @@ async def remove(ctx, *imena):
         upis = upis + ' ' + imena[x]
     try:
         q.remove(upis)
+        response = 'Maknul sam pesmu ' + upis        
     except:
         response = 'Nema pesme na tom mestu u kjuu'
         await ctx.send(response)
