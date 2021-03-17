@@ -14,7 +14,7 @@ from pretty_help import PrettyHelp
 
 server = 'SERVER'
 
-svirac = commands.Bot(command_prefix='b', help_command=PrettyHelp(no_category="Help", show_index=False))
+svirac = commands.Bot(command_prefix='<', help_command=PrettyHelp(no_category="Help", show_index=False))
 q = deque()
 sviram = ' '
 
@@ -67,7 +67,8 @@ async def sviraj(ctx, *ime):
     try: await channel.connect()
     except:
         print('Already connected.')
-        await ctx.send('Sviram pesmu ' + sviram)
+        if vc.is_playing():
+            await ctx.send('Sviram pesmu ' + sviram)
 
     fajlq = ime[0]
     duljina = len(ime)
@@ -199,5 +200,12 @@ async def skini(ctx, *upis):
         pjesma = pjesma + ' ' + upis[x]
     download(pjesma)
     await ctx.send('Skinuto je.')
+
+@svirac.command(name='now', help='ispisuje trenutnu pesmu')
+async def now(ctx):
+    if vc.is_playing():
+        await ctx.send('Sviram pesmu ' + sviram)
+    else:
+        ctx.send('Ne sviram nikaj. Koji ti je kurac?')    
 
 svirac.run('TOKEN')
