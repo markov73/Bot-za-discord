@@ -102,7 +102,7 @@ async def sviraj(ctx, *ime):
             download(fajlq)
             await ctx.send('Skinuto je.')
             q.append(fajlq)
-            
+
     vc = ctx.voice_client
     await ctx.send('Dodana je pesma ' + q[-1])
 
@@ -144,7 +144,8 @@ async def remove(ctx, *imena):
         upis = upis + ' ' + imena[x]
     try:
         q.remove(upis)
-        response = 'Maknul sam pesmu ' + upis        
+        response = 'Maknul sam pesmu ' + upis
+        await ctx.send(response)
     except:
         response = 'Nema pesme na tom mestu u kjuu'
         await ctx.send(response)
@@ -209,5 +210,58 @@ async def now(ctx):
         await ctx.send('Sviram pesmu ' + sviram)
     else:
         ctx.send('Ne sviram nikaj. Koji ti je kurac?')
+
+@svirac.command(name='ladd', help='stavlja pesmu na odabranu playlistu (upisite ime liste pa zatim ime pesme)')
+async def ladd(ctx, list, *args):
+    upis = args[0]
+    for x in range(1, len(args)):
+        upis = upis + ' ' + args[x]
+
+    fajl2 = open(list + ".txt", "a+")
+
+    if os.path.exists('/home/jakov/Documents/muzickibot/muzika/' + upis + ".mp3"):
+        pesma = '/home/jakov/Documents/muzickibot/muzika/' + upis + ".mp3"
+        fajl2.write(upis + "\n")
+        await ctx.send('Stavljena je pesma ' + upis + ' na listu ' + list)
+    else:
+        #fajl ne postoji
+        najmanja = -1 #razlika najblizeg
+        fajl = ' ' #ime najblizeg
+
+        os.system('ls > popis.txt')
+        file = open("popis.txt", "r")
+
+        for x in file:
+            distanca = difflib.SequenceMatcher(None, upis, x[:len(x)-4]).ratio()
+            if(distanca > najmanja):
+                najmanja = distanca
+                fajl = x
+
+        if najmanja > 0.6 * pow(0.995, len(fajl)-6):
+            fajl = fajl[:len(fajl)-5]
+            fajl2.write(fajl + "\n")
+            await ctx.send('Stavljena je pesma ' + fajl + ' na listu ' + list)
+        else:
+            download(upis)
+            await ctx.send('Skinuto je.')
+            fajl2.write(upis + "\n")
+            await ctx.send('Stavljena je pesma ' + upis + ' na listu ' + list)
+
+@svirac.command(name='lplay', help='stavlja odabranu listu na kju')
+async def lplay(ctx, list):
+    channel = ctx.message.author.voice.channel
+    try: await channel.connect()
+    except:
+        vc = ctx.voice_client
+        print('Already connected.')
+        if vc.is_playing():
+            await ctx.send('Sviram pesmu ' + sviram)
+
+    fajl = open(list + ".txt", "r")
+    for x in fajl:
+        q.append(x[:len(x)-1])
+
+    vc = ctx.voice_client
+    muzika(vc)
 
 svirac.run('TOKEN')
