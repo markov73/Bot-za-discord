@@ -66,6 +66,7 @@ async def sviraj(ctx, *ime):
     channel = ctx.message.author.voice.channel
     try: await channel.connect()
     except:
+        vc = ctx.voice_client
         print('Already connected.')
         if vc.is_playing():
             await ctx.send('Sviram pesmu ' + sviram)
@@ -101,10 +102,9 @@ async def sviraj(ctx, *ime):
             download(fajlq)
             await ctx.send('Skinuto je.')
             q.append(fajlq)
-
-
-    await ctx.send('Dodana je pesma ' + q[-1])
+            
     vc = ctx.voice_client
+    await ctx.send('Dodana je pesma ' + q[-1])
 
     muzika(vc)
 
@@ -203,9 +203,10 @@ async def skini(ctx, *upis):
 
 @svirac.command(name='now', help='ispisuje trenutnu pesmu')
 async def now(ctx):
+    vc = ctx.voice_client
     if vc.is_playing():
         await ctx.send('Sviram pesmu ' + sviram)
     else:
-        ctx.send('Ne sviram nikaj. Koji ti je kurac?')    
+        ctx.send('Ne sviram nikaj. Koji ti je kurac?')
 
 svirac.run('TOKEN')
